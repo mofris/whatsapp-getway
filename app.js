@@ -9,31 +9,12 @@ const app = express();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-// const SESSION_FILE_PATH = './whatsapp-session.json'
-// let sessionCfg;
-// if (fs.existsSync(SESSION_FILE_PATH)) {
-//   sessionCfg = require(SESSION_FILE_PATH)
-// }
-
-// const client = new Client({ puppeteer: { headless: true }, session: sessionCfg });
-
 client.on('qr', (qr) => {
   // Generate and scan this code with your phone
   console.log('QR RECEIVED', qr);
   qr.size
   qrcode.generate(qr, { small: true })
 });
-
-
-// client.on('authenticated', (session) => {
-//   console.log('AUTHENTICATED', session);
-//   sessionCfg = session;
-//   fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
-//     if (err) {
-//       console.error(err)
-//     }
-//   })
-// })
 
 client.on('ready', () => {
   console.log('Client is ready!');
@@ -59,8 +40,6 @@ client.on('message', msg => {
 app.get('/msg/:id/:msg', (req, res) => {
   const number = req.params.id;
   const msg = "Hallo!!! \nApakah anda ingin mengupdate data anda? \nReplay 'Y' untuk menkonfirmasi data anda, \nReplay 'T' untuk mengcancel data anda \n\n whatsapp notif by faris";
-  // const phone = req.body.id;
-  // const m = req.body.msg;
 
   client.sendMessage(number, msg)
     .then(response => {
